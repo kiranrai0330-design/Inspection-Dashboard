@@ -4,48 +4,57 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Descartes Inspection Dashboard</title>
-    <!-- Descartes Compliance Suite: Geotab Add-In Dashboard -->
     <script>
       /**
-       * Geotab Add-In Initialization
-       * This script must be in the <head> to ensure it's defined before MyGeotab attempts to call it.
+       * Descartes Geotab Add-In Initialization
+       * Hardened version to resolve "Technical Issue" loading errors.
        */
       window.geotab = window.geotab || {};
       window.geotab.addin = window.geotab.addin || {};
       
-      /**
-       * Define the Add-In logic.
-       * We use a shared function and assign it to multiple possible names to ensure compatibility.
-       */
-      var descartesAddIn = function (api, state) {
-        console.log("Descartes Add-In: Constructor called");
+      // The core Add-In factory function
+      var descartesFactory = function (api, state) {
         return {
           initialize: function (api, state, callback) {
-            console.log("Descartes Add-In: Initializing...");
+            console.log("Descartes: Initializing API...");
             window.geotabApi = api;
             window.geotabState = state;
             
-            // Signal to MyGeotab that initialization is complete.
-            // This MUST be called to prevent the "Technical Issue" error.
+            // Signal completion to MyGeotab
             if (typeof callback === 'function') {
               callback();
             }
+            
+            // Notify React app
             window.dispatchEvent(new CustomEvent('geotab-ready'));
           },
           focus: function (api, state) {
-            console.log("Descartes Add-In: Focused");
             window.dispatchEvent(new CustomEvent('geotab-focus'));
           },
-          blur: function (api, state) {
-            console.log("Descartes Add-In: Blurred");
+          blur: function () {
+            // Cleanup if needed
           }
         };
       };
 
-      // Assign to possible camelCased variations of the Add-In name and menu name
-      window.geotab.addin.descartesInspectionDashboard = descartesAddIn;
-      window.geotab.addin.inspectionDashboard = descartesAddIn;
-      window.geotab.addin.descartesDashboard = descartesAddIn;
+      /**
+       * Map the factory to every possible name variation to ensure 
+       * MyGeotab finds the entry point regardless of configuration naming.
+       */
+      var addinNames = [
+        'DescartesDashboard',
+        'descartesDashboard',
+        'descartesInspectionDashboard',
+        'inspectionDashboard',
+        'descartes',
+        'addin'
+      ];
+
+      addinNames.forEach(function(name) {
+        window.geotab.addin[name] = descartesFactory;
+      });
+      
+      console.log("Descartes: Geotab entry points registered:", addinNames);
     </script>
   </head>
   <body>
