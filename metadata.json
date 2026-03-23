@@ -1,5 +1,5 @@
 {
-  "name": "Hello World App",
-  "description": "A simple React application that displays a friendly Hello World message.",
+  "name": "Geotab Inspection Dashboard",
+  "description": "A high-performance compliance dashboard for MyGeotab to track driver inspection completion rates.",
   "requestFramePermissions": []
 }
