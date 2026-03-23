@@ -72,7 +72,8 @@ export default function App() {
       const fromDate = new Date(dateStart + 'T00:00:00').toISOString();
       const toDate = new Date(dateEnd + 'T23:59:59').toISOString();
 
-      const api = mockGeotabApi;
+      // Use the real Geotab API if available, otherwise fall back to mock
+      const api = (window as any).geotabApi || mockGeotabApi;
 
       // 1. Fetch Groups first if we don't have them
       let groups = availableGroups;
@@ -180,6 +181,11 @@ export default function App() {
 
   useEffect(() => {
     fetchData();
+
+    // Listen for Geotab focus event to refresh data
+    const handleFocus = () => fetchData();
+    window.addEventListener('geotab-focus', handleFocus);
+    return () => window.removeEventListener('geotab-focus', handleFocus);
   }, [selectedGroups]); // Re-fetch when group filter changes
 
   const stats = useMemo<KPIStats>(() => {
@@ -226,8 +232,11 @@ export default function App() {
       {/* Header */}
       <header className="bg-[#1e293b] text-white px-6 py-4 flex flex-col md:flex-row md:items-center justify-between gap-4 sticky top-0 z-50 shadow-lg">
         <div className="flex items-center gap-4">
-          <div className="bg-blue-500 p-2 rounded-lg">
+          <div className="bg-blue-500 p-2 rounded-lg relative">
             <ShieldCheck className="w-6 h-6 text-white" />
+            {!(window as any).geotabApi && (
+              <div className="absolute -top-1 -right-1 w-3 h-3 bg-amber-500 border-2 border-[#1e293b] rounded-full" title="Using Mock Data" />
+            )}
           </div>
           <div>
             <h1 className="text-lg font-semibold leading-tight">Inspection Dashboard</h1>
