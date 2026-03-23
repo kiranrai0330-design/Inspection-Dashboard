@@ -1,0 +1,5 @@
+{
+  "name": "Hello World App",
+  "description": "A simple React application that displays a friendly Hello World message.",
+  "requestFramePermissions": []
+}
