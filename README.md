@@ -1,20 +1,40 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# Geotab Inspection Dashboard (Descartes Compliance Suite)
 
-# Run and deploy your AI Studio app
+A high-performance compliance dashboard for MyGeotab to track driver inspection completion rates. This dashboard helps fleet managers quickly identify non-compliant drivers and ensure safety across the fleet.
 
-This contains everything you need to run your app locally.
+## Features
+- **Real-time Compliance Tracking**: Monitor missing, partial, and full compliance across the entire fleet.
+- **KPI Summary**: Instant visibility into non-compliance counts and overall fleet score.
+- **Interactive Data Table**: Detailed daily breakdown of inspections vs. vehicles driven for each driver.
+- **Geotab Native Group Filtering**: Seamlessly filters data based on MyGeotab's organizational groups.
+- **7-Day Date Range Enforcement**: Optimized for performance and API call efficiency.
+- **CSV Export**: Download detailed reports for offline analysis.
 
-View your app in AI Studio: https://ai.studio/apps/cc615bcc-9a54-471b-abc3-e8cceb0dc8bc
+## Tech Stack
+- **React 19**
+- **Tailwind CSS 4**
+- **Motion** (for smooth animations)
+- **Lucide React** (for iconography)
+- **Vite** (for fast development and building)
 
-## Run Locally
+## Geotab Integration
+This dashboard is designed to be hosted as a MyGeotab Add-In. It uses the Geotab JavaScript SDK to fetch `Trip`, `DVIRLog`, `User`, `Device`, and `Group` data.
 
-**Prerequisites:**  Node.js
-
-
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+### Configuration
+To install in MyGeotab, use the following configuration:
+```json
+{
+  "name": "Inspection Dashboard",
+  "supportEmail": "kiranrai0330@gmail.com",
+  "version": "1.0.0",
+  "items": [
+    {
+      "url": "YOUR_HOSTED_URL",
+      "path": "ActivityLink/",
+      "menuName": {
+        "en": "Inspection Dashboard"
+      }
+    }
+  ]
+}
+```

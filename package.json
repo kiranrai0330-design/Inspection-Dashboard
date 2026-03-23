@@ -1,7 +1,8 @@
 {
-  "name": "react-example",
+  "name": "geotab-inspection-dashboard",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "Descartes Compliance Suite: A high-performance inspection dashboard for MyGeotab.",
   "type": "module",
   "scripts": {
     "dev": "vite --port=3000 --host=0.0.0.0",
