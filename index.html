@@ -13,7 +13,7 @@
       window.geotab.addin = window.geotab.addin || {};
       
       // The factory function that Geotab calls
-      var descartesAddIn = function (api, state) {
+      window.descartesAddIn = function (api, state) {
         console.log("Descartes: Factory function called by MyGeotab");
         return {
           /**
@@ -62,6 +62,7 @@
         'descartesInspectionDashboard',
         'Descartes_Inspection_Dashboard',
         'descartes_inspection_dashboard',
+        'Descartes Inspection Dashboard',
         'InspectionDashboard',
         'inspectionDashboard',
         'Descartes',
@@ -69,11 +70,24 @@
         'addin'
       ];
 
-      possibleNames.forEach(function(name) {
-        window.geotab.addin[name] = descartesAddIn;
-      });
+      // Use a Proxy to catch any name Geotab might be looking for
+      if (typeof Proxy !== 'undefined') {
+        window.geotab.addin = new Proxy(window.geotab.addin || {}, {
+          get: function(target, name) {
+            console.log("Descartes: Geotab requested addin name:", name);
+            if (name in target) return target[name];
+            // Fallback to our factory for any requested name
+            return window.descartesAddIn;
+          }
+        });
+      } else {
+        // Fallback for older browsers
+        possibleNames.forEach(function(name) {
+          window.geotab.addin[name] = window.descartesAddIn;
+        });
+      }
       
-      console.log("Descartes: Geotab entry points registered:", possibleNames);
+      console.log("Descartes: Geotab entry points registered and Proxy active.");
     </script>
   </head>
   <body>
