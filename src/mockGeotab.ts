@@ -1,3 +1,10 @@
+/**
+ * Geotab API Simulation
+ * 
+ * Provides mock data for the Inspection Dashboard for preview and testing.
+ * Simulates Geotab's Get methods for User, Group, Device, Trip, and DVIRLog.
+ */
+
 import { DriverData } from './types';
 
 /**

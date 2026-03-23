@@ -1,6 +1,9 @@
 /**
  * @license
- * SPDX-License-Identifier: Apache-2.0
+ * Descartes Compliance Suite
+ * 
+ * Main application component for the Geotab Inspection Dashboard.
+ * Handles data fetching, group filtering, and KPI visualization.
  */
 
 import React, { useState, useEffect, useMemo } from 'react';

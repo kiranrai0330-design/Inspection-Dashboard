@@ -1,3 +1,9 @@
+/**
+ * Data Models and Interfaces
+ * 
+ * Defines the core data structures used throughout the Descartes Inspection Dashboard.
+ */
+
 export interface DriverDayData {
   miles: number;
   vehicles: Set<string>;
