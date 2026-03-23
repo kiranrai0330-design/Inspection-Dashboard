@@ -7,54 +7,73 @@
     <script>
       /**
        * Descartes Geotab Add-In Initialization
-       * Hardened version to resolve "Technical Issue" loading errors.
+       * Super-Robust version to handle all Geotab environments.
        */
       window.geotab = window.geotab || {};
       window.geotab.addin = window.geotab.addin || {};
       
-      // The core Add-In factory function
-      var descartesFactory = function (api, state) {
+      // The factory function that Geotab calls
+      var descartesAddIn = function (api, state) {
+        console.log("Descartes: Factory function called by MyGeotab");
         return {
+          /**
+           * initialize() is called when the Add-In is first loaded.
+           * We must call the callback() to remove the "Technical Issue" overlay.
+           */
           initialize: function (api, state, callback) {
-            console.log("Descartes: Initializing API...");
+            console.log("Descartes: initialize() called");
             window.geotabApi = api;
             window.geotabState = state;
             
-            // Signal completion to MyGeotab
-            if (typeof callback === 'function') {
-              callback();
+            // Handle the callback signal (handshake)
+            var cb = callback || (arguments.length > 2 ? arguments[2] : null);
+            if (typeof cb === 'function') {
+              console.log("Descartes: Sending handshake callback...");
+              cb();
             }
             
-            // Notify React app
+            // Notify the React application
             window.dispatchEvent(new CustomEvent('geotab-ready'));
           },
+          /**
+           * focus() is called every time the user clicks the menu item.
+           */
           focus: function (api, state) {
+            console.log("Descartes: focus() called");
             window.dispatchEvent(new CustomEvent('geotab-focus'));
           },
+          /**
+           * blur() is called when the user navigates away.
+           */
           blur: function () {
-            // Cleanup if needed
+            console.log("Descartes: blur() called");
           }
         };
       };
 
       /**
-       * Map the factory to every possible name variation to ensure 
-       * MyGeotab finds the entry point regardless of configuration naming.
+       * Register the Add-In under every possible name variation.
+       * This ensures compatibility regardless of the 'name' field in the JSON.
        */
-      var addinNames = [
+      var possibleNames = [
         'DescartesDashboard',
         'descartesDashboard',
+        'DescartesInspectionDashboard',
         'descartesInspectionDashboard',
+        'Descartes_Inspection_Dashboard',
+        'descartes_inspection_dashboard',
+        'InspectionDashboard',
         'inspectionDashboard',
+        'Descartes',
         'descartes',
         'addin'
       ];
 
-      addinNames.forEach(function(name) {
-        window.geotab.addin[name] = descartesFactory;
+      possibleNames.forEach(function(name) {
+        window.geotab.addin[name] = descartesAddIn;
       });
       
-      console.log("Descartes: Geotab entry points registered:", addinNames);
+      console.log("Descartes: Geotab entry points registered:", possibleNames);
     </script>
   </head>
   <body>
