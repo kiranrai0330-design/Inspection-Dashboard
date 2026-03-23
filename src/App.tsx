@@ -182,10 +182,18 @@ export default function App() {
   useEffect(() => {
     fetchData();
 
+    // Listen for Geotab ready event (when API is first initialized)
+    const handleReady = () => fetchData();
+    window.addEventListener('geotab-ready', handleReady);
+
     // Listen for Geotab focus event to refresh data
     const handleFocus = () => fetchData();
     window.addEventListener('geotab-focus', handleFocus);
-    return () => window.removeEventListener('geotab-focus', handleFocus);
+    
+    return () => {
+      window.removeEventListener('geotab-ready', handleReady);
+      window.removeEventListener('geotab-focus', handleFocus);
+    };
   }, [selectedGroups]); // Re-fetch when group filter changes
 
   const stats = useMemo<KPIStats>(() => {

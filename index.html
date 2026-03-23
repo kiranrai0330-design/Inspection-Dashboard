@@ -12,29 +12,49 @@
       /**
        * Geotab Add-In Initialization
        * This script bridges the Geotab platform with the React application.
+       * The function name must match the camelCased name of the Add-In in the configuration.
        */
       window.geotab = window.geotab || {};
       window.geotab.addin = window.geotab.addin || {};
       
-      // The name here must match the Add-In configuration or be generic
-      window.geotab.addin.inspectionDashboard = function (api, state) {
+      // "Descartes Inspection Dashboard" -> descartesInspectionDashboard
+      window.geotab.addin.descartesInspectionDashboard = function (api, state) {
+        console.log("Descartes Add-In: Constructor called");
         return {
+          /**
+           * initialize() is called only once when the Add-In is first loaded.
+           * @param {object} api - The Geotab API object.
+           * @param {object} state - The Geotab state object.
+           * @param {function} callback - The callback to signal initialization is complete.
+           */
           initialize: function (api, state, callback) {
+            console.log("Descartes Add-In: Initializing...");
+            
             // Store Geotab objects globally for React to pick up
             window.geotabApi = api;
             window.geotabState = state;
             
             // Signal to MyGeotab that initialization is complete
+            // This is CRITICAL. If not called, MyGeotab shows a "Technical Issue" error.
             if (typeof callback === 'function') {
               callback();
             }
+            
+            // Trigger a custom event so React knows the API is ready
+            window.dispatchEvent(new CustomEvent('geotab-ready'));
           },
+          /**
+           * focus() is called every time the user navigates to the Add-In.
+           */
           focus: function (api, state) {
-            // Optional: Trigger a custom event for React to refresh data
+            console.log("Descartes Add-In: Focused");
             window.dispatchEvent(new CustomEvent('geotab-focus'));
           },
+          /**
+           * blur() is called when the user navigates away from the Add-In.
+           */
           blur: function (api, state) {
-            // Optional: Handle cleanup
+            console.log("Descartes Add-In: Blurred");
           }
         };
       };
